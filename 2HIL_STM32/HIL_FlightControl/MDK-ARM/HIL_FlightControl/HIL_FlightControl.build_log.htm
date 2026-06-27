@@ -1,0 +1,72 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.41.0.0
+Copyright (C) 2024 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 a, 1, LIC=03C6R-KBYEJ-01BP1-CBEQ3-WIZFD-6R5KR
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.41.0.0
+Toolchain Path:  D:\Keil5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 6 (build 750)
+Assembler:       Armasm.exe V5.06 update 6 (build 750)
+Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
+Library Manager: ArmAr.exe V5.06 update 6 (build 750)
+Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
+CPU DLL:         SARMCM3.DLL V5.41.0.0
+Dialog DLL:      DCM.DLL V1.17.5.0
+Target DLL:      CMSIS_AGDI.dll V1.33.21.0
+Dialog DLL:      TCM.DLL V1.56.4.0
+ 
+<h2>Project:</h2>
+D:\My_FPV_Project\HIL_STM32\HIL_FlightControl\MDK-ARM\HIL_FlightControl.uvprojx
+Project File Date:  06/26/2026
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\Keil5\ARM\ARMCC\Bin'
+*** Warning: You are compiling one or more files of source type C++ and have selected 'use MicroLIB'. MicroLIB does not support C++!
+  
+Build target 'HIL_FlightControl'
+compiling MyTask.c...
+..\User\Bsp\mavlink\common\common.h(128): warning:  #66-D: enumeration value is out of "int" range
+     MAV_SYS_STATUS_EXTENSION_USED=2147483648, /* 0x80000000 Extended bit-field are used for further sensor status bits (needs to be set in onboard_control_sensors_present only) | */
+..\User\Bsp\mavlink\common\common.h(129): warning:  #66-D: enumeration value is out of "int" range
+     MAV_SYS_STATUS_SENSOR_ENUM_END=2147483649, /*  | */
+..\User\Bsp\mavlink\common\common.h(2677): warning:  #66-D: enumeration value is out of "int" range
+     HIL_SENSOR_UPDATED_RESET=2147483648, /* Full reset of attitude/position/velocities/etc was performed in sim (Bit 31). | */
+..\User\Bsp\mavlink\common\common.h(2678): warning:  #66-D: enumeration value is out of "int" range
+     HIL_SENSOR_UPDATED_FLAGS_ENUM_END=2147483649, /*  | */
+..\User\App\MyTask.c: 4 warnings, 0 errors
+linking...
+Program Size: Code=38064 RO-data=4148 RW-data=412 ZI-data=40508  
+FromELF: creating hex file...
+"HIL_FlightControl\HIL_FlightControl.axf" - 0 Error(s), 4 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                https://www.keil.com/pack/ARM.CMSIS.6.1.0.pack
+                ARM::CMSIS@6.1.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: CORE Version: 6.1.0
+
+Package Vendor: Keil
+                https://www.keil.com/pack/Keil.STM32F4xx_DFP.2.17.1.pack
+                Keil::STM32F4xx_DFP@2.17.1
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  ./RTE/_HIL_FlightControl
+  D:/Keil5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include
+  D:/Keil5/ARM/PACK/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE@6.1.0
+      Include file:  CMSIS/Core/Include/tz_context.h
+Build Time Elapsed:  00:00:10
+</pre>
+</body>
+</html>

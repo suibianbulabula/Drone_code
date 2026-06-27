@@ -1,0 +1,16 @@
+hil_flightcontrol\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/tasks.c
+hil_flightcontrol\tasks.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stdlib.h
+hil_flightcontrol\tasks.o: D:\Keil5\ARM\ARMCC\Bin\..\include\string.h
+hil_flightcontrol\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+hil_flightcontrol\tasks.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stddef.h
+hil_flightcontrol\tasks.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
+hil_flightcontrol\tasks.o: ../Core/Inc/FreeRTOSConfig.h
+hil_flightcontrol\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+hil_flightcontrol\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+hil_flightcontrol\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+hil_flightcontrol\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+hil_flightcontrol\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+hil_flightcontrol\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+hil_flightcontrol\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+hil_flightcontrol\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+hil_flightcontrol\tasks.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/stack_macros.h

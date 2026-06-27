@@ -1,0 +1,15 @@
+hil_flightcontrol\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/queue.c
+hil_flightcontrol\queue.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stdlib.h
+hil_flightcontrol\queue.o: D:\Keil5\ARM\ARMCC\Bin\..\include\string.h
+hil_flightcontrol\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+hil_flightcontrol\queue.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stddef.h
+hil_flightcontrol\queue.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
+hil_flightcontrol\queue.o: ../Core/Inc/FreeRTOSConfig.h
+hil_flightcontrol\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+hil_flightcontrol\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+hil_flightcontrol\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+hil_flightcontrol\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+hil_flightcontrol\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+hil_flightcontrol\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+hil_flightcontrol\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+hil_flightcontrol\queue.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h

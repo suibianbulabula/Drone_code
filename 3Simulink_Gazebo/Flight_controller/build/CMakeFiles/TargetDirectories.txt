@@ -1,0 +1,3 @@
+/home/dbh/Flight_controller/build/CMakeFiles/flight_controller.dir
+/home/dbh/Flight_controller/build/CMakeFiles/edit_cache.dir
+/home/dbh/Flight_controller/build/CMakeFiles/rebuild_cache.dir
