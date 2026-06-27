@@ -33,7 +33,10 @@ My_FPV_Project/
 </details>
 
 ## 效果展示
+仿真演示
 ![运行截图](5Pitcture/gazebo仿真.jpg)
+真机演示
+![运行截图](5Pitcture/追踪测试.jpg)
 
 ## 使用说明
 ### Gazebo仿真环境搭建
