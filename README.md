@@ -108,6 +108,7 @@ My_FPV_Project/
     - FlightControlTask任务：队列接收数据，进行传感器数据处理以及飞行控制（200Hz）计算，将计算结果通过队列传给发送任务。
     - SendActuatorTask任务：队列接收计算结果，MAVLINK发送数据。
   - /User/App下的其他文件: 包括全局变量、传感器数据处理、姿态控制、位置控制以及规划文件
+![串口数据](5Pitcture/HIL测试串口打印数据.png)
   
 ### 3Simulink_Gazebo
 - Gazebo SITL测试的代码，视频所演示的是无人机通过camara识别追踪位于Gazebo世界坐标（0，-2）处的绿色box，并绕其进行圆形路径环绕飞行，工作流程如下：
@@ -134,9 +135,11 @@ My_FPV_Project/
 - ESC电调：由四个单独的AM32电调组成，AM32配置如下：
   ![AM32电调配置](5Pitcture/AM32配置.png)
 - 飞控板：由STM32F4最小系统板、各个传感器以及DCDC降压模块组成
-    - 飞控PCB板：[PCB1](1Hardware/FlightControl_board/Flight_Control_V3.eprj)
-    - 传感器：MPU6050模块、NRF24L01无线通信模块、HMC5883L磁力计、ThoneFlow-3901U光流传感器构成
+  - 飞控PCB板：[PCB1](1Hardware/FlightControl_board/Flight_Control_V3.eprj)
+  - ![飞控板](5Pitcture/飞控板.jpg)
+  - 传感器：MPU6050模块、NRF24L01无线通信模块、HMC5883L磁力计、ThoneFlow-3901U光流传感器构成
 - 遥控板：[PCB2](1Hardware/RemoteControl_board/Remote_Board.eprj)
+  - ![遥控板](5Pitcture/遥控板.jpg)
 - 视觉识别小主机：由泰山派RK3566开发板、USB摄像头以及电源模块构成
 
 ## 补充说明
