@@ -48,7 +48,7 @@ My_FPV_Project/
   - Gazebo11：直接通过sudo apt install -y ros-humble-ros-gz安装，或者手动安装，但是官方已将其从 Ubuntu 默认源中移除，需手动添加 OSRF 官方软件源才能通过 apt 安装
 - **PX4-Autopilot sitl_gazebo插件编译**
   - 我们更改的PX4-Autopilot无人机模型是旧版本的，现在的官方源码地址是最新版，我暂时不知晓新版本会不会不兼容旧版本，这里还是推荐旧版本，下载地址：
-  - 由于模型需要PX4的动力学电机插件libgazebo_multirotor_base_plugin.so、libgazebo_motor_model.so以及传感器插件libgazebo_groundtruth_plugin.so、libgazebo_magnetometer_plugin.so等插件，所以需要在PX4-Autopilot/Tools/sitl_gazebo目录下创建build文件目录，用提供的4Sitl_gazebo_build下的CMakeLists.txt覆盖原先的，然后输入命令进行编译,成功后会生成所需的插件和头文件
+  - 由于模型需要PX4的动力学电机插件libgazebo_multirotor_base_plugin.so、libgazebo_motor_model.so以及传感器libgazebo_groundtruth_plugin.so、libgazebo_magnetometer_plugin.so等插件，所以需要在PX4-Autopilot/Tools/sitl_gazebo目录下创建build文件目录，用提供的4Sitl_gazebo_build/CMakeLists.txt覆盖原先的CMakeLists，然后输入命令进行编译,成功后会生成所需的插件和头文件
   ```bash
   cmake .. -DBUILD_GSTREAMER_PLUGIN=OFF -DMAVLINK_INCLUDE_DIRS=/root/mavlink
   make -j$(nproc)
@@ -97,11 +97,19 @@ My_FPV_Project/
 </table>
 
 ### 2HIL_STM32
-是STM32F4HIL测试的代码，工作流程：
-- PC端：gazebo启动仿真，Flight_controller代码在main.cpp中修改模式mode为HIL模式并启动运行，这时Flight_controller会收集gazebo传感器数据包括imu的6轴数据、mag磁力计三轴数据、气压计数据以及gps的三轴坐标数据，打包给MAVLINk。
-- STM32F4：通过USB虚拟串口CDC与PC虚拟机进行MAVLINK通信，将接收的数据进行处理，接着进入飞行控制部分，包括姿态控制、位置控制以及简易路径规划位置控制，最后将计算出的四个电机速度打包给MAVLINK传回PC。
+STM32F4 HIL测试的代码，工作流程：
+- PC端：gazebo启动仿真，Flight_controller代码在main.cpp中修改模式mode为HIL模式并启动运行，这时Flight_controller会订阅gazebo传感器发布的数据，包括imu的6轴数据、mag磁力计三轴数据、气压计数据以及gps的三轴坐标数据，之后将数据打包给MAVLINk。
+- STM32F4：通过USB虚拟串口CDC与PC虚拟机进行MAVLINK通信，将接收的数据进行处理，接着进入飞行控制部分，包括姿态控制、位置控制以及简易路径规划位置控制，最后将计算出的四个电机速度打包给MAVLINK传回PC，STM32工程主要文件及说明如下：
+    - usbd_cdc_if.c:修改CDC_Receive_FS函数
+    - main.c:进行初始化
+    - MyTask.c:创建静态FreeRTOS任务与静态队列，三个任务中飞控任务为最高优先级
+      - StartCDCReceiveTask任务：接收MAVLINK传感器数据，通过队列传递给飞控任务。
+      - FlightControlTask任务：队列接收数据，进行传感器数据处理以及飞行控制（200Hz）计算，将计算结果通过队列传给发送任务。
+      - SendActuatorTask任务：队列接收计算结果，MAVLINK发送数据。
+    - /User/App下的其他文件: 包括全局变量、传感器数据处理、姿态控制、位置控制以及规划文件
   
 ### 3Simulink_Gazebo
+
 
 ## 真机介绍
 无人机图片展示
