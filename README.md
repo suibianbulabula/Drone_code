@@ -33,21 +33,21 @@ My_FPV_Project/
 </details>
 
 ## 效果展示
-仿真演示
 完整圆形轨迹跟踪演示视频  
 [视频1](6Video/camara_track_circle.mp4)  
 [视频2](6Video/drone_greenbox_track.mp4)  
+仿真演示  
 ![运行截图](5Pitcture/gazebo仿真.jpg)
-真机演示
+真机演示  
 ![运行截图](5Pitcture/追踪测试.jpg)
 
 ## 使用说明
-### Gazebo仿真环境搭建
+### Gazebo仿真环境搭建与代码运行
 - **Ubuntu 22.04 + Gazebo Classic 11**  
   - Ubutu：由于我虚拟机Ubuntu是18.04版本，所以我用fishros一键安装指令安装了带ros2 humble版本的ubuntu 22.04环境的docker，实测可用（我这里创建了一个docker名为Suibian，输入e启动，s进入）
   - Gazebo11：直接通过sudo apt install -y ros-humble-ros-gz安装，或者手动安装，但是官方已将其从 Ubuntu 默认源中移除，需手动添加 OSRF 官方软件源才能通过 apt 安装
 - **PX4-Autopilot sitl_gazebo插件编译**
-  - 我们更改的PX4-Autopilot无人机模型是旧版本的，现在的官方源码地址是最新的，我暂时不知晓会不会新版本会不会不兼容旧版本，这里还是推荐旧版本，下载地址：
+  - 我们更改的PX4-Autopilot无人机模型是旧版本的，现在的官方源码地址是最新版，我暂时不知晓新版本会不会不兼容旧版本，这里还是推荐旧版本，下载地址：
   - 由于模型需要PX4的动力学电机插件libgazebo_multirotor_base_plugin.so、libgazebo_motor_model.so以及传感器插件libgazebo_groundtruth_plugin.so、libgazebo_magnetometer_plugin.so等插件，所以需要在PX4-Autopilot/Tools/sitl_gazebo目录下创建build文件目录，用提供的4Sitl_gazebo_build下的CMakeLists.txt覆盖原先的，然后输入命令进行编译,成功后会生成所需的插件和头文件
   ```bash
   cmake .. -DBUILD_GSTREAMER_PLUGIN=OFF -DMAVLINK_INCLUDE_DIRS=/root/mavlink
@@ -77,5 +77,43 @@ My_FPV_Project/
   ```
 
 ## 代码说明
+### 无人机方向与坐标轴自定义规定
+<table>
+<tr>
+  <td align="center"><b>1 (CW)</b><br></td>
+  <td align="center"><b>↑ +X </b></td>
+  <td align="center"><b>2 (CCW)</b><br></td>
+</tr>
+<tr>
+  <td align="center">← +Y </td>
+  <td></td>
+  <td align="center">Y- →(机头前进方向)</td>
+</tr>
+<tr>
+  <td align="center"><b>3 (CCW)</b><br></td>
+  <td align="center"><b>↓ -X </b></td>
+  <td align="center"><b>0 (CCW)</b><br></td>
+</tr>
+</table>
+
+### 2HIL_STM32
+是STM32F4HIL测试的代码，工作流程：
+- PC端：gazebo启动仿真，Flight_controller代码在main.cpp中修改模式mode为HIL模式并启动运行，这时Flight_controller会收集gazebo传感器数据包括imu的6轴数据、mag磁力计三轴数据、气压计数据以及gps的三轴坐标数据，打包给MAVLINk。
+- STM32F4：通过USB虚拟串口CDC与PC虚拟机进行MAVLINK通信，将接收的数据进行处理，接着进入飞行控制部分，包括姿态控制、位置控制以及简易路径规划位置控制，最后将计算出的四个电机速度打包给MAVLINK传回PC。
+  
+### 3Simulink_Gazebo
+
+## 真机介绍
+无人机图片展示
+![无人机1](5Pitcture/无人机1.jpg)
+![无人机2](5Pitcture/无人机2.jpg)
+### 硬件组成
+- ESC电调：由四个单独的AM32电调组成，AM32配置如下：
+  ![AM32电调配置](5Pitcture/AM32配置.png)
+- 飞控板：由STM32F4最小系统板、各个传感器以及DCDC降压模块组成
+    - 飞控PCB板：[PCB1](1Hardware/FlightControl_board/Flight_Control_V3.eprj)
+    - 传感器：MPU6050模块、NRF24L01无线通信模块、HMC5883L磁力计、ThoneFlow-3901U光流传感器构成
+- 遥控板：[PCB2](1Hardware/RemoteControl_board/Remote_Board.eprj)
+- 视觉识别小主机：由泰山派RK3566开发板、USB摄像头以及电源模块构成
   
   
