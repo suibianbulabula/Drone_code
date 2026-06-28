@@ -1,5 +1,5 @@
 # 介绍
-  本项目基于修改后的 PX4-Autopilot Iris 无人机模型，在 Gazebo 中构建仿真环境，用于验证自己编写的飞控代码、简易物体追踪和简易路径规划算法。项目涵盖 C++ 仿真飞控核心、STM32飞控代码、MAVLink 通信桥接以及视觉模块，支持简单纯软件在环（SITL）与硬件在环（HIL）两种验证模式，并在真机无人机验证实现。
+  本项目基于修改后的 PX4-Autopilot Iris 无人机模型，在 Gazebo 中构建仿真环境，用于验证自己编写的飞控代码、简易物体追踪和简易路径规划算法。项目涵盖 C++ 仿真飞控核心、STM32飞控代码、MAVLink 通信桥接以及视觉模块，支持简单纯软件在环（SITL）与硬件在环（HIL）两种验证模式，并在真机无人机验证实现，后续会添加mavros实现飞控与ROS2进行MAVLINk通信，并添加ROS2相关内容。
 ## 项目文件结构
 <details>
 <summary>点击展开项目文件结构目录</summary>
@@ -97,18 +97,33 @@ My_FPV_Project/
 </table>
 
 ### 2HIL_STM32
-STM32F4 HIL测试的代码，工作流程：
-- PC端：gazebo启动仿真，Flight_controller代码在main.cpp中修改模式mode为HIL模式并启动运行，这时Flight_controller会订阅gazebo传感器发布的数据，包括imu的6轴数据、mag磁力计三轴数据、气压计数据以及gps的三轴坐标数据，之后将数据打包给MAVLINk。
-- STM32F4：通过USB虚拟串口CDC与PC虚拟机进行MAVLINK通信，将接收的数据进行处理，接着进入飞行控制部分，包括姿态控制、位置控制以及简易路径规划位置控制，最后将计算出的四个电机速度打包给MAVLINK传回PC，STM32工程主要文件及说明如下：
-    - usbd_cdc_if.c:修改CDC_Receive_FS函数
-    - main.c:进行初始化
-    - MyTask.c:创建静态FreeRTOS任务与静态队列，三个任务中飞控任务为最高优先级
-      - StartCDCReceiveTask任务：接收MAVLINK传感器数据，通过队列传递给飞控任务。
-      - FlightControlTask任务：队列接收数据，进行传感器数据处理以及飞行控制（200Hz）计算，将计算结果通过队列传给发送任务。
-      - SendActuatorTask任务：队列接收计算结果，MAVLINK发送数据。
-    - /User/App下的其他文件: 包括全局变量、传感器数据处理、姿态控制、位置控制以及规划文件
+- STM32F4 HIL测试的代码，工作流程：
+  - PC端：gazebo启动仿真，Flight_controller代码在main.cpp中修改模式mode为HIL模式并启动运行，这时Flight_controller会订阅gazebo传感器发布的数据，包括imu的6轴数据、mag磁力计三轴数据、气压计数据以及gps的三轴坐标数据，之后将数据打包给MAVLINk。
+  - STM32F4：通过USB虚拟串口CDC与PC虚拟机进行MAVLINK通信，将接收的数据进行处理，接着进入飞行控制部分，包括姿态控制、位置控制以及简易路径规划位置控制，最后将计算出的四个电机速度打包给MAVLINK传回PC。
+- STM32F4工程主要文件及说明如下：
+  - usbd_cdc_if.c:修改CDC_Receive_FS函数
+  - main.c:进行初始化
+  - MyTask.c:创建静态FreeRTOS任务与静态队列，三个任务中飞控任务为最高优先级
+    - StartCDCReceiveTask任务：接收MAVLINK传感器数据，通过队列传递给飞控任务。
+    - FlightControlTask任务：队列接收数据，进行传感器数据处理以及飞行控制（200Hz）计算，将计算结果通过队列传给发送任务。
+    - SendActuatorTask任务：队列接收计算结果，MAVLINK发送数据。
+  - /User/App下的其他文件: 包括全局变量、传感器数据处理、姿态控制、位置控制以及规划文件
   
 ### 3Simulink_Gazebo
+- Gazebo SITL测试的代码，视频所演示的是无人机通过camara识别追踪位于Gazebo世界坐标（0，-2）处的绿色box，并绕其进行圆形路径环绕飞行，工作流程如下：
+  - gazebo启动仿真，Flight_controller代码在main.cpp中修改模式mode为AUTOMATIC模式并启动运行，这里有两个线程，一个是飞控主循环（200hz），一个是视觉图像处理线程（约每秒执行 30 次）。
+    - 飞控主循环负责会订阅gazebo传感器发布的数据（与上面STM32一致）并处理，随后进入飞行控制部分，包括姿态控制、位置控制。
+    - 视觉图像处理线程使用opencv图像处理库，通过订阅gazebo发布的相机话题获取图像数据，并进行图像处理，将图像转为 HSV 颜色空间，用阈值 (35,80,80) ~ (85,255,255) 提取绿色区域，寻找轮廓，筛选最大轮廓面积 > 500 视为有效目标，设置目标位置为水平方向要求绿色方块中心居中，垂直方向要求绿色方块中心贴着画面较底部，提供给飞控水平目标位置和垂直目标位置做为位置控制的目标输入。
+- 工程主要文件及说明如下：
+  - /Flight_controller/src/：
+    - main.cpp；主函数主要负责飞行模式切换、订阅gazebo传感器话题、开启相机线程、开启mavlink线程、发布电机速度话题以及进行主循环飞控任务。
+    - globals.cpp：定义全局传感器数据、飞行模式枚举、飞行状态以及相关全局变量。
+    - sensor.cpp：负责添加gazebo传感器话题callback函数以及传感器数据处理。
+    - attitude_control.cpp && position_control.cpp && planning.cpp：分别对应姿态控制、位置控制和规划。
+    - my_mavlink.cpp：MAVLINK发送和接收数据的两个线程。
+    - vision_control.cpp：负责opencv图像处理线程。
+  - /Gazebo_Model/：包含运行所需要的世界文件和模型sdf文件，在iris_D435i.sdf文件中，与原PX4文件对比，注释掉了mavlink插件，使用的相机插件是gazebo自带的libCameraPlugin插件。
+
 
 
 ## 真机介绍
@@ -125,13 +140,13 @@ STM32F4 HIL测试的代码，工作流程：
 - 视觉识别小主机：由泰山派RK3566开发板、USB摄像头以及电源模块构成
 
 ## 补充说明
-## 项目的目前存在的简化限制与后续完善
+### 项目目前存在的简化限制与后续完善
 - **姿态表示**：使用欧拉角（pitch/roll/yaw），俯仰接近 ±90° 时存在万向节死锁风险。后续会改用四元数提高全姿态覆盖能力。
 - **偏航估计**：仅由磁力计直接解算，未融合陀螺仪数据，易受磁场干扰、动态响应慢。计划加入 Mahony 互补滤波或 EKF。
 - **陀螺仪积分**：没有采用完整的欧拉运动学方程，直接对机体角速度进行积分更新角度。在小角度（＜10°）时误差可接受，但大角度机动会导致姿态估算偏差。
 - **水平位置控制**：世界系误差转机体系时只绕 Z 轴（偏航角）旋转，忽略了滚转和俯仰的影响，依赖“俯仰/滚转小”的假设。后续会引入完整的三维坐标变换。
 - **高度控制**：使用气压计换算相对高度，频率较低（50 Hz），且没有与加速度计融合，垂直速度估计有延迟。会考虑互补滤波或使用 GPS 高度改善。
 - **传感器噪声**：IMU、磁力计、气压计等原始数据未经过低通滤波，直接用于控制可能会导致执行器抖动。已在部分环节加入简单阈值保护，但仍需完善。
-- **mavros**：
+- **mavros**：后续会添加mavros实现飞控与ROS2进行MAVLINk通信，并添加ROS2相关内容。
   
   
