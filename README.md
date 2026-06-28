@@ -1,5 +1,5 @@
 # 介绍
-  本项目基于修改后的 PX4-Autopilot Iris 无人机模型，在 Gazebo 中构建仿真环境，用于验证自己编写的飞控代码、简易物体追踪和简易路径规划算法。项目涵盖 C++ 仿真飞控核心、STM32飞控代码、MAVLink 通信桥接以及视觉模块，支持简单纯软件在环（SITL）与硬件在环（HIL）两种验证模式，并在真机无人机验证实现，后续会添加真机代码以及mavros实现飞控与ROS2进行MAVLINk通信，并添加ROS2相关内容。
+  本项目基于修改后的 PX4-Autopilot Iris 无人机模型，在 Gazebo 中构建仿真环境，用于验证自己编写的飞控代码、简易物体追踪和简易路径规划算法。项目涵盖 C++ 仿真飞控核心、STM32飞控代码、MAVLink 通信桥接以及视觉模块，支持简单纯软件在环（SITL）与硬件在环（HIL）两种验证模式，并在真机无人机上验证实现，后续会添加真机代码以及mavros实现飞控与ROS2进行MAVLINk通信，并添加ROS2相关内容。
 ## 项目文件结构
 <details>
 <summary>点击展开项目文件结构目录</summary>
@@ -23,9 +23,9 @@ My_FPV_Project/
 │       └── CMakeLists.txt       
 │   └── Gazebo_Model/            # model选取并修改了PX4 iris_D435i.sdf文件，用于验证自己的飞控代码
 │       ├── model/               # 包括iris_D435i、iris、gps以及自建的greebox模型文件
-│       ├── worlds/              # gazebo运行世界文件
+│       └──  worlds/              # gazebo运行世界文件
 ├── 4Sitl_gazebo_build/          # 编译旧版PX4的Sitl_gazebo所修改的CMakeLists.txt文件
-│   ├── CMakeLists.txt           # 注释掉了不需要的文件引用和目录，以免编译报错
+│   └──  CMakeLists.txt           # 注释掉了不需要的文件引用和目录，以免编译报错
 ├── 5Pitcture/                   # 相关图片
 ├── 6Video/                      # 演示视频，包括简易视觉物体追踪仿真与物理实现
 └── README.md                    # 本文件
@@ -33,7 +33,7 @@ My_FPV_Project/
 </details>
 
 ## 效果展示
-完整圆形轨迹跟踪演示视频  
+完整相机圆形轨迹跟踪演示视频  
 [视频1](6Video/camara_track_circle.mp4)  
 [视频2](6Video/drone_greenbox_track.mp4)  
 仿真演示  
