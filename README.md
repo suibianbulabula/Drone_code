@@ -71,7 +71,12 @@ My_FPV_Project/
   cmake ..
   make -j$(nproc)
   ```
-  - 编译完成后，会生成flight_controller可执行文件，输入下面指令运行代码
+  - 编译完成后，会生成flight_controller可执行文件，输入下面指令运行代码  
+    - 新建终端，gazebo先启动世界文件
+  ```bash
+  gazebo --verbose ~/.gazebo/worlds/iris_runway.world
+  ```
+    - 在/Flight_controller/build目录下执行
   ```bash
   ./flight_controller 2>&1 | grep -v "libprotobuf ERROR"
   ```
